@@ -1,12 +1,13 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
-import { getAuthenticatedUserId } from "@/lib/auth";
+import { verifyAuthToken } from "@/lib/auth";
 import User from "@/models/User";
 
-export async function GET() {
-  try {
-    const userId = await getAuthenticatedUserId();
+export async function GET(request: NextRequest) {
+  const token = request.cookies.get("token")?.value;
+  const userId = await verifyAuthToken(token);
 
+  try {
     if (!userId) {
       return NextResponse.json(
         {
@@ -16,6 +17,8 @@ export async function GET() {
         { status: 401 },
       );
     }
+
+    // Keep the rest of your existing code here.
 
     await connectDB();
 

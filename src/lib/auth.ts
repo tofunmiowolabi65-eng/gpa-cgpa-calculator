@@ -19,6 +19,20 @@ export async function createToken(userId: string) {
     .sign(secretKey);
 }
 
+export async function verifyAuthToken(token: string | undefined) {
+  if (!token) return null;
+
+  try {
+    const { payload } = await jwtVerify(token, secretKey);
+
+    if (typeof payload.userId !== "string") return null;
+
+    return payload.userId;
+  } catch {
+    return null;
+  }
+}
+
 export async function getAuthenticatedUserId() {
   const cookieStore = await cookies();
   const token = cookieStore.get(COOKIE_NAME)?.value;

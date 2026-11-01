@@ -241,8 +241,18 @@ if (savedData) {
         throw new Error("Could not load your courses.");
       }
 
-      const coursesResult = await coursesResponse.json();
-      const dbCourses = coursesResult.data || [];
+      
+const coursesResult = await coursesResponse.json();
+
+const dbCourses = (coursesResult.data || []).map(
+  (course: { _id?: string; id?: string; [key: string]: unknown }) => ({
+    ...course,
+    id: String(course._id ?? course.id ?? ""),
+  }),
+);
+
+
+      
 
       // STEP F: Put courses into their correct sessions and semesters
       const sessionsWithCourses = savedSessions.map((session) => ({
@@ -433,9 +443,9 @@ if (savedData) {
     if (
       credits.trim() === "" ||
       !Number.isFinite(parsedCredits) ||
-      parsedCredits <= 0
+      parsedCredits < 0
     ) {
-      setError("Credits must be a number greater than zero.");
+      setError("Credits must be zero or greater.");
       return;
     }
 
@@ -1234,7 +1244,7 @@ async function handleLogout() {
                   <input
                     id="credits"
                     type="number"
-                    min="1"
+                    min="0"
                     step="0.5"
                     className={inputClass}
                     value={credits ?? ""}

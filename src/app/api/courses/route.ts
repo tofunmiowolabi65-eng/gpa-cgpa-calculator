@@ -60,7 +60,7 @@ export async function POST(request: Request) {
       !name.trim() ||
       typeof credits !== "number" ||
       !Number.isFinite(credits) ||
-      credits < 0.5 ||
+      credits < 0 ||
       !["A", "B", "C", "D", "E", "F"].includes(grade) ||
       typeof sessionId !== "string" ||
       !sessionId.trim() ||

@@ -21,7 +21,7 @@ const courseSchema = new Schema(
     credits: {
       type: Number,
       required: true,
-      min: 0.5,
+      min: 0,
     },
     grade: {
       type: String,

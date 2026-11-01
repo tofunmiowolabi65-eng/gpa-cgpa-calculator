@@ -66,10 +66,10 @@ export async function PATCH(request: Request, { params }: RouteContext) {
       "credits" in updates &&
       (typeof updates.credits !== "number" ||
         !Number.isFinite(updates.credits) ||
-        updates.credits < 0.5)
+        updates.credits < 0)
     ) {
       return NextResponse.json(
-        { message: "Invalid course credits" },
+        { message: "Credits must be zero or greater" },
         { status: 400 },
       );
     }
